@@ -1,74 +1,44 @@
-<?php echo 'PHP OOP'.'<br/>';
+<?php // STATIC PROPERTIES
+      // declaring class properties or methods as static makes them accessible
+      // without needing an instantiation of the class
+      // a property declared as static cannot be accessed with an instantiated class object
+      // (though a static method can)
+      // because static methods are callable without an instance of the object created
+      // the pseudo-variable '$this' is not available inside the method declared as static
 
-// MAGIC METHODS
-// __destruct() and __clone() method
-// magic methods start with double underscore
-
-class User
+class Weather
 {
-    public $username;
-    public $role = 'Member';
-    protected $email;
+    public static $tempConditions = ['cold', 'mild', 'warm'];
 
-    public function __construct($username, $email)
+    public static function celsiusToFarenheit($celsius)
     {
-        $this->username = $username;
-        $this->email = $email;
+        return ($celsius * 9 / 5 + 32).'<br/>';
     }
 
-    public function __destruct()
+    public static function determineTempConditions($farenheit)
     {
-        echo "The user {$this->username} has been removed".'<br/>';
-    }
-
-    // CLONE METHOD
-    // making a clone of another object
-    // by default, you will copy all the same properties/methods from the object
-
-    public function __clone()
-    {
-        $this->username = $this->username.'(clone) ';
-        // grab the username from userOne
-        // and set it equal to this object's username
-    }
-
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    public function setEmail($email)
-    {
-        if (strpos($email, '@') > -1) {
-            $this->email = $email;
+        if ($farenheit < 40) {
+            return self::$tempConditions[0].'<br/>';
         }
+        if ($farenheit < 70) {
+            return self::$tempConditions[1].'<br/>';
+        }
+
+        return self::$tempConditions[2].'<br/>';
+        // since an instance does not exist, you use 'self::property'
+        // this will refer to the actual class itself and its property
+        // self = Weather class
     }
 }
 
-class AdminUser extends User
-{
-    public $level;
-    public $role = 'Admin';
+print_r(Weather::$tempConditions);
+// this is a static method
+// without the need to create an instance to reference
+// you can use static properties/methods like so
+// this will have direct access to those properties or methods
 
-    public function __construct($username, $email, $level)
-    {
-        $this->level = $level;
-        parent::__construct($username, $email);
-    }
-
-    public function message()
-    {
-        return "{$this->email} sent a new message";
-    }
-}
-
-$userOne = new User('Phil', 'phil@philly.com');
-$userTwo = new User('Rod', 'rod@roddy.com');
-$userThree = new AdminUser('Rich', 'rich@richy.com', 8);
-
-$userFour = clone $userOne;
-// made an identical copy of $userOne stored in $userFour
-echo $userFour->username;
+echo Weather::celsiusToFarenheit(24);
+echo Weather::determineTempConditions(80);
 
 ?>
 
