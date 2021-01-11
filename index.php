@@ -1,10 +1,7 @@
 <?php echo 'PHP OOP'.'<br/>';
 
-// PROTECTED MODIFIER
-// how can a child class access a private property from the parent class?
-// use 'protected' access modifier rather than private
-// this allows child classes that inherits from the parent class can access that property
-// can only be used internally between classes and does not allow access from outside classes
+// MAGIC METHODS
+// destruct and clone method
 
 class User
 {
@@ -18,14 +15,17 @@ class User
         $this->email = $email;
     }
 
-    public function addFriend()
-    {
-        return "{$this->email} added a new friend".'<br/>';
-    }
+    // Step 1 - create a __destruct method
 
-    public function message()
+    public function __destruct()
     {
-        return "{$this->email} sent a new message";
+        // performs any kind of clean-up or run any final code
+        // whenever the last reference to a object instance is removed
+        // example: you create a new instance for a user that references to a variable
+        // the variable is just a reference or pointer
+        // once that reference is removed and no other references pointing to that instance
+        // then the destruct method will execute to remove it
+        echo "The user {$this->username} has been removed".'<br/>';
     }
 
     public function getEmail()
@@ -45,7 +45,6 @@ class AdminUser extends User
 {
     public $level;
     public $role = 'Admin';
-    // if wanting to override a property/method then you can set a value in child class
 
     public function __construct($username, $email, $level)
     {
@@ -63,13 +62,15 @@ $userOne = new User('Phil', 'phil@philly.com');
 $userTwo = new User('Rod', 'rod@roddy.com');
 $userThree = new AdminUser('Rich', 'rich@richy.com', 8);
 
-echo $userOne->role.'<br/>';
-echo $userThree->role.'<br/>';
+// Step 2 - use unset() to complete the destruct method
+// unset(property) - destroys the specified variables
+// basically this will remove the reference to the variable
 
-echo $userOne->message().'<br/>';
-echo $userThree->message().'<br/>';
-
-echo $userThree->getEmail().'<br/>';
+// unset($userOne);
+// this will remove that reference to the userOne property
+// when PHP finishes executing or reach the end of the code
+// it will remove other references because you don't need them anymore
+// so you can remove unset() and it will still have the same effect
 
 ?>
 
