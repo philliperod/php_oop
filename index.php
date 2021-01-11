@@ -1,7 +1,8 @@
 <?php echo 'PHP OOP'.'<br/>';
 
 // MAGIC METHODS
-// destruct and clone method
+// __destruct() and __clone() method
+// magic methods start with double underscore
 
 class User
 {
@@ -15,17 +16,20 @@ class User
         $this->email = $email;
     }
 
-    // Step 1 - create a __destruct method
-
     public function __destruct()
     {
-        // performs any kind of clean-up or run any final code
-        // whenever the last reference to a object instance is removed
-        // example: you create a new instance for a user that references to a variable
-        // the variable is just a reference or pointer
-        // once that reference is removed and no other references pointing to that instance
-        // then the destruct method will execute to remove it
         echo "The user {$this->username} has been removed".'<br/>';
+    }
+
+    // CLONE METHOD
+    // making a clone of another object
+    // by default, you will copy all the same properties/methods from the object
+
+    public function __clone()
+    {
+        $this->username = $this->username.'(clone) ';
+        // grab the username from userOne
+        // and set it equal to this object's username
     }
 
     public function getEmail()
@@ -62,15 +66,9 @@ $userOne = new User('Phil', 'phil@philly.com');
 $userTwo = new User('Rod', 'rod@roddy.com');
 $userThree = new AdminUser('Rich', 'rich@richy.com', 8);
 
-// Step 2 - use unset() to complete the destruct method
-// unset(property) - destroys the specified variables
-// basically this will remove the reference to the variable
-
-// unset($userOne);
-// this will remove that reference to the userOne property
-// when PHP finishes executing or reach the end of the code
-// it will remove other references because you don't need them anymore
-// so you can remove unset() and it will still have the same effect
+$userFour = clone $userOne;
+// made an identical copy of $userOne stored in $userFour
+echo $userFour->username;
 
 ?>
 
